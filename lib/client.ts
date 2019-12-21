@@ -177,7 +177,9 @@ export class Client {
             console.log('Lulu API::handleError', error.error);
         }
         return new Promise(reject => {
-            this.isAuthenticated = false;
+            if (this) {
+                this.isAuthenticated = false;
+            }
             reject(error);
         });
     }
