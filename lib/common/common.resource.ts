@@ -1,10 +1,10 @@
 import * as rp from 'request-promise';
 
-import { IList } from "./interfaces";
-import { Client } from "../client";
+import { IList } from './interfaces';
+import { Client } from '../client';
 
 export namespace resource {
-    export type TitleOptions = "MR" | "MISS" | "MRS" | "MS" | "DR";
+    export type TitleOptions = 'MR' | 'MISS' | 'MRS' | 'MS' | 'DR';
     export type ShippingLevel =
         | 'MAIL'
         | 'PRIORITY_MAIL'
@@ -41,14 +41,14 @@ export namespace resource {
 
     // Lulu Shipping Options //
     export interface ShippingListOptions extends IPaging {
-        iso_country_code?: string,
-        currency?: string,
-        quantity?: string,
-        pod_package_id?: string,
-        state_code?: string,
-        level?: ShippingLevel,
-        postbox_ok?: boolean,
-        fastest_per_level?: boolean,
+        iso_country_code?: string;
+        currency?: string;
+        quantity?: string;
+        pod_package_id?: string;
+        state_code?: string;
+        level?: ShippingLevel;
+        postbox_ok?: boolean;
+        fastest_per_level?: boolean;
     }
 
     export interface ShippingOption {
@@ -81,12 +81,14 @@ export namespace resource {
          * @param { ShippingListOptions } params - the shipping option list options
          * @return Promise<IList<<ShippingOption>>
          */
-        async list(params: ShippingListOptions): Promise<IList<ShippingOption>> {
+        async list(
+            params: ShippingListOptions,
+        ): Promise<IList<ShippingOption>> {
             // console.log('list params', params);
             let opts: rp.OptionsWithUri = {
                 method: 'GET',
                 uri: '/print-shipping-options/',
-                qs: params
+                qs: params,
             };
             // console.log('qs', opts.qs);
             return await this.client.request(opts);
@@ -95,24 +97,24 @@ export namespace resource {
 
     // Lulu Print Jobs //
     export interface PrintJobListOptions extends IPaging {
-        created_after?: string,
-        created_before?: string,
-        modified_after?: string,
-        modified_before?: string,
-        id?: string,
-        order_id?: string,
-        exclude_line_items?: boolean,
-        search?: string,
-        ordering?: string
+        created_after?: string;
+        created_before?: string;
+        modified_after?: string;
+        modified_before?: string;
+        id?: string;
+        order_id?: string;
+        exclude_line_items?: boolean;
+        search?: string;
+        ordering?: string;
     }
 
     export interface PrintJobStatisticsOptions extends IPaging {
-        created_after?: string,
-        created_before?: string,
-        modified_after?: string,
-        modified_before?: string,
-        id?: string,
-        ordering?: string
+        created_after?: string;
+        created_before?: string;
+        modified_after?: string;
+        modified_before?: string;
+        id?: string;
+        ordering?: string;
     }
 
     export interface PrintJobEstimateItem {
@@ -122,7 +124,7 @@ export namespace resource {
     }
 
     export interface PrintJobCalculationOptions {
-        line_items: PrintJobEstimateItem[],
+        line_items: PrintJobEstimateItem[];
         shipping_address: ShippingAddress;
         shipping_option: ShippingLevel;
     }
@@ -189,7 +191,13 @@ export namespace resource {
     export interface Status {
         changed?: string;
         messages: string | Message;
-        name: "CREATED" | "ACCEPTED" | "REJECTED" | "IN_PRODUCTION" | "ERROR" | "SHIPPED";
+        name:
+            | 'CREATED'
+            | 'ACCEPTED'
+            | 'REJECTED'
+            | 'IN_PRODUCTION'
+            | 'ERROR'
+            | 'SHIPPED';
     }
 
     export interface Printable {
@@ -220,8 +228,8 @@ export namespace resource {
     }
 
     export interface PrintJobCost {
-        currency: "USD" | "CAD",
-        line_item_costs: LineItemCost | LineItemCost [];
+        currency: 'USD' | 'CAD';
+        line_item_costs: LineItemCost | LineItemCost[];
         shipping_cost: {
             tax_rate: string;
             total_cost_excl_tax: string;
@@ -255,21 +263,20 @@ export namespace resource {
     }
 
     export interface IPrintJobs {
-        list(params: PrintJobListOptions): Promise<IList<PrintJob>>
+        list(params: PrintJobListOptions): Promise<IList<PrintJob>>;
 
-        statistics(params: PrintJobStatisticsOptions): Promise<JobStatistics>
+        statistics(params: PrintJobStatisticsOptions): Promise<JobStatistics>;
 
-        retrieve(id: string): Promise<PrintJob>
+        retrieve(id: string): Promise<PrintJob>;
 
-        cost(id: string): Promise<PrintJobCost>
+        cost(id: string): Promise<PrintJobCost>;
 
-        status(id: string): Promise<Status>
+        status(id: string): Promise<Status>;
 
-        calculation(param: PrintJobCalculationOptions): Promise<PrintJobCost>
+        calculation(param: PrintJobCalculationOptions): Promise<PrintJobCost>;
     }
 
     export class PrintJobs implements IPrintJobs {
-
         constructor(private client: Client) {}
 
         /**
@@ -282,7 +289,7 @@ export namespace resource {
             let opts: rp.OptionsWithUri = {
                 method: 'GET',
                 uri: '/print-jobs/',
-                qs: params
+                qs: params,
             };
             // console.log('qs', opts.qs);
             return await this.client.request(opts);
@@ -293,7 +300,9 @@ export namespace resource {
          * @param { PrintJobStatisticsOptions } params - the print statistics retrieve options
          * @return Promise<JobStatistics>
          */
-        async statistics(params: PrintJobStatisticsOptions): Promise<JobStatistics> {
+        async statistics(
+            params: PrintJobStatisticsOptions,
+        ): Promise<JobStatistics> {
             let opts: rp.OptionsWithUri = {
                 method: 'GET',
                 uri: '/print-jobs/statistics/',
@@ -301,7 +310,7 @@ export namespace resource {
                     'Cache-Control': 'no-cache',
                     'Content-Type': 'application/json',
                 },
-                qs: params
+                qs: params,
             };
 
             return await this.client.request(opts);
@@ -371,7 +380,9 @@ export namespace resource {
          * @param {PrintJobCalculationOptions} param - Sample print job to estimate the cost of
          * @return Promise<PrintJobCost>
          */
-        async calculation(param: PrintJobCalculationOptions): Promise<PrintJobCost> {
+        async calculation(
+            param: PrintJobCalculationOptions,
+        ): Promise<PrintJobCost> {
             let opts: rp.OptionsWithUri = {
                 method: 'POST',
                 uri: `/print-job-cost-calculations/`,
@@ -380,7 +391,7 @@ export namespace resource {
                     'Content-Type': 'application/json',
                 },
                 body: param,
-                json: true
+                json: true,
             };
 
             return await this.client.request(opts);

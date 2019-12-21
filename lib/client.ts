@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import * as moment from 'moment';
 
 import { LuluConfigOptions } from './common/interfaces/index';
-import { IAuthenticationResponse } from './common/interfaces/index'
+import { IAuthenticationResponse } from './common/interfaces/index';
 
 export class Client {
     private client_id!: string;
@@ -23,7 +23,8 @@ export class Client {
     private initialization!: Promise<any>;
     private sandbox: string = 'https://api.sandbox.lulu.com';
     private prod: string = 'https://api.lulu.com';
-    private tokenUrl: string = 'auth/realms/glasstree/protocol/openid-connect/token';
+    private tokenUrl: string =
+        'auth/realms/glasstree/protocol/openid-connect/token';
     private url: string = '';
 
     constructor(config: LuluConfigOptions) {
@@ -46,16 +47,22 @@ export class Client {
                 let result = await this.getToken();
                 return result;
             }
-            if (this.isAuthenticated && this.decoded && !moment.unix(this.decoded.payload.exp).isAfter(now.add(10,'minutes'))) {
-                let result = await this.refreshToken(this.decoded)
+            if (
+                this.isAuthenticated &&
+                this.decoded &&
+                !moment
+                    .unix(this.decoded.payload.exp)
+                    .isAfter(now.add(10, 'minutes'))
+            ) {
+                let result = await this.refreshToken(this.decoded);
             }
         } catch (error) {
             throw new TypeError('Unable to initiate due to \n' + error);
         }
-    }
+    };
 
     /**
-     * 
+     *
      * @param { IAuthenticationResponse } data - the authentication response from lulu
      * @returns request headers
      */
@@ -90,7 +97,7 @@ export class Client {
             json: true,
         };
 
-        let result = await rp(this.url, opts).catch((this.handleError));
+        let result = await rp(this.url, opts).catch(this.handleError);
 
         if (result.access_token) {
             // console.log('authentication successful', result.token_type);
@@ -119,7 +126,7 @@ export class Client {
             json: true,
         };
 
-        let result = await rp(this.url, opts).catch((this.handleError));
+        let result = await rp(this.url, opts).catch(this.handleError);
 
         if (result.access_token) {
             // console.log('refresh_token successful', result.token_type);
@@ -131,7 +138,7 @@ export class Client {
     }
 
     /**
-     * 
+     *
      * @param { rp.OptionsWithUri } data - the request-promise options with uri
      * @returns rp.RequestPromise
      */
@@ -146,7 +153,8 @@ export class Client {
 
         // add API key, but don't overwrite if header already set
         if (typeof (<request.Headers>headers).Authorization === 'undefined') {
-            (<request.Headers>headers).Authorization = 'Bearer ' + data.access_token;
+            (<request.Headers>headers).Authorization =
+                'Bearer ' + data.access_token;
         }
         // return
         return headers;
@@ -154,7 +162,10 @@ export class Client {
 
     private createRequest(data: rp.OptionsWithUri): rp.RequestPromise {
         // merge data with empty request //
-        let request: rp.OptionsWithUri = this.mergeData(this.defaultRequest, data);
+        let request: rp.OptionsWithUri = this.mergeData(
+            this.defaultRequest,
+            data,
+        );
 
         // add headers //
         request.headers = this.createHeaders(request.headers);
@@ -165,7 +176,7 @@ export class Client {
         if (error.error) {
             console.log('Lulu API::handleError', error.error);
         }
-        return new Promise((reject) => {
+        return new Promise(reject => {
             this.isAuthenticated = false;
             reject(error);
         });
