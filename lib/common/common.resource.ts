@@ -26,7 +26,7 @@ export namespace resource {
         state_code?: string;
         street1: string;
         street2?: string;
-        title: TitleOptions;
+        title?: TitleOptions;
     }
 
     export interface IPaging {
