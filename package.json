@@ -4,16 +4,21 @@
       "name": "Dexter Hardy",
       "email": "dexter.hardy@ntegral.com",
       "url": "http://www.ntegral.com"
+    },
+    {
+      "name": "Mattt",
+      "email": "mattt@readeval.press",
+      "url": "https://readeval.press"
     }
   ],
-  "name": "@ntegral/lulu",
-  "version": "1.0.5",
+  "name": "@readeval/lulu",
+  "version": "1.1.0",
   "description": "Lulu Print API Client",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ntegral/lulu-client"
+    "url": "git+https://github.com/readeval/lulu-client"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
