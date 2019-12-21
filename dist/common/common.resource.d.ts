@@ -1,7 +1,7 @@
-import { IList } from "./interfaces";
-import { Client } from "../client";
+import { IList } from './interfaces';
+import { Client } from '../client';
 export declare namespace resource {
-    type TitleOptions = "MR" | "MISS" | "MRS" | "MS" | "DR";
+    type TitleOptions = 'MR' | 'MISS' | 'MRS' | 'MS' | 'DR';
     type ShippingLevel = 'MAIL' | 'PRIORITY_MAIL' | 'GROUND_HD' | 'GROUND_BUS' | 'GROUND' | 'EXPEDITED' | 'EXPRESS';
     interface ShippingAddress {
         city: string;
@@ -90,6 +90,29 @@ export declare namespace resource {
         shipping_address: ShippingAddress;
         shipping_option: ShippingLevel;
     }
+    interface PrintJobCreationOptions {
+        contact_email: string;
+        external_id?: string;
+        line_items: PrintJobCreationLineItem[];
+        production_delay?: number;
+        shipping_address: ShippingAddress;
+        shipping_option: ShippingLevel;
+    }
+    interface PrintJobCreationLineItem {
+        cover?: string | PrintJobCreationLineItemSource;
+        external_id?: string;
+        interior?: string | PrintJobCreationLineItemSource;
+        pod_package_id?: string;
+        printable_id?: string;
+        shipping_option: ShippingLevel;
+        printable_normalization?: PrintableNormalization;
+        quantity: number;
+        title: string;
+    }
+    interface PrintJobCreationLineItemSource {
+        source_url: string;
+        source_md5_sum?: string;
+    }
     interface EstimatedShippingDates {
         arrival_max: string;
         arrival_min: string;
@@ -145,7 +168,7 @@ export declare namespace resource {
     interface Status {
         changed?: string;
         messages: string | Message;
-        name: "CREATED" | "ACCEPTED" | "REJECTED" | "IN_PRODUCTION" | "ERROR" | "SHIPPED";
+        name: 'CREATED' | 'ACCEPTED' | 'REJECTED' | 'IN_PRODUCTION' | 'ERROR' | 'SHIPPED';
     }
     interface Printable {
         external_id: string;
@@ -172,7 +195,7 @@ export declare namespace resource {
         printer_at_fault: string;
     }
     interface PrintJobCost {
-        currency: "USD" | "CAD";
+        currency: 'USD' | 'CAD';
         line_item_costs: LineItemCost | LineItemCost[];
         shipping_cost: {
             tax_rate: string;
@@ -208,6 +231,7 @@ export declare namespace resource {
         list(params: PrintJobListOptions): Promise<IList<PrintJob>>;
         statistics(params: PrintJobStatisticsOptions): Promise<JobStatistics>;
         retrieve(id: string): Promise<PrintJob>;
+        create(param: PrintJobCreationOptions): Promise<PrintJob>;
         cost(id: string): Promise<PrintJobCost>;
         status(id: string): Promise<Status>;
         calculation(param: PrintJobCalculationOptions): Promise<PrintJobCost>;
@@ -218,6 +242,7 @@ export declare namespace resource {
         list(params: PrintJobListOptions): Promise<IList<PrintJob>>;
         statistics(params: PrintJobStatisticsOptions): Promise<JobStatistics>;
         retrieve(id: string): Promise<PrintJob>;
+        create(param: PrintJobCreationOptions): Promise<PrintJob>;
         cost(id: string): Promise<PrintJobCost>;
         status(id: string): Promise<Status>;
         calculation(param: PrintJobCalculationOptions): Promise<PrintJobCost>;

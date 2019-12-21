@@ -35,7 +35,11 @@ class Client {
                     let result = yield this.getToken();
                     return result;
                 }
-                if (this.isAuthenticated && this.decoded && !moment.unix(this.decoded.payload.exp).isAfter(now.add(10, 'minutes'))) {
+                if (this.isAuthenticated &&
+                    this.decoded &&
+                    !moment
+                        .unix(this.decoded.payload.exp)
+                        .isAfter(now.add(10, 'minutes'))) {
                     let result = yield this.refreshToken(this.decoded);
                 }
             }
@@ -77,9 +81,8 @@ class Client {
                 },
                 json: true,
             };
-            let result = yield rp(this.url, opts).catch((this.handleError));
+            let result = yield rp(this.url, opts).catch(this.handleError);
             if (result.access_token) {
-                console.log('authentication successful', result.token_type);
                 this.authorizeHeader(result);
                 this.isAuthenticated = true;
             }
@@ -101,9 +104,8 @@ class Client {
                 },
                 json: true,
             };
-            let result = yield rp(this.url, opts).catch((this.handleError));
+            let result = yield rp(this.url, opts).catch(this.handleError);
             if (result.access_token) {
-                console.log('refresh_token successful', result.token_type);
                 this.authorizeHeader(result);
                 this.isAuthenticated = true;
             }
@@ -119,7 +121,8 @@ class Client {
     createHeaders(data) {
         const headers = this.mergeData(this.defaultHeaders, data);
         if (typeof headers.Authorization === 'undefined') {
-            headers.Authorization = 'Bearer ' + data.access_token;
+            headers.Authorization =
+                'Bearer ' + data.access_token;
         }
         return headers;
     }
@@ -132,7 +135,7 @@ class Client {
         if (error.error) {
             console.log('Lulu API::handleError', error.error);
         }
-        return new Promise((reject) => {
+        return new Promise(reject => {
             this.isAuthenticated = false;
             reject(error);
         });

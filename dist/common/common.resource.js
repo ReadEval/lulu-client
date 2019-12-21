@@ -17,13 +17,11 @@ var resource;
         }
         list(params) {
             return __awaiter(this, void 0, void 0, function* () {
-                console.log('list params', params);
                 let opts = {
                     method: 'GET',
                     uri: '/print-shipping-options/',
-                    qs: params
+                    qs: params,
                 };
-                console.log('qs', opts.qs);
                 return yield this.client.request(opts);
             });
         }
@@ -35,13 +33,11 @@ var resource;
         }
         list(params) {
             return __awaiter(this, void 0, void 0, function* () {
-                console.log('list params', params);
                 let opts = {
                     method: 'GET',
                     uri: '/print-jobs/',
-                    qs: params
+                    qs: params,
                 };
-                console.log('qs', opts.qs);
                 return yield this.client.request(opts);
             });
         }
@@ -54,7 +50,7 @@ var resource;
                         'Cache-Control': 'no-cache',
                         'Content-Type': 'application/json',
                     },
-                    qs: params
+                    qs: params,
                 };
                 return yield this.client.request(opts);
             });
@@ -68,6 +64,21 @@ var resource;
                         'Cache-Control': 'no-cache',
                         'Content-Type': 'application/json',
                     },
+                };
+                return yield this.client.request(opts);
+            });
+        }
+        create(param) {
+            return __awaiter(this, void 0, void 0, function* () {
+                let opts = {
+                    method: 'POST',
+                    uri: `/print-jobs/`,
+                    headers: {
+                        'Cache-Control': 'no-cache',
+                        'Content-Type': 'application/json',
+                    },
+                    body: param,
+                    json: true,
                 };
                 return yield this.client.request(opts);
             });
@@ -108,7 +119,7 @@ var resource;
                         'Content-Type': 'application/json',
                     },
                     body: param,
-                    json: true
+                    json: true,
                 };
                 return yield this.client.request(opts);
             });

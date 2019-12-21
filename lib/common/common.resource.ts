@@ -129,6 +129,32 @@ export namespace resource {
         shipping_option: ShippingLevel;
     }
 
+    export interface PrintJobCreationOptions {
+        contact_email: string;
+        external_id?: string;
+        line_items: PrintJobCreationLineItem[];
+        production_delay?: number;
+        shipping_address: ShippingAddress;
+        shipping_option: ShippingLevel;
+    }
+
+    export interface PrintJobCreationLineItem {
+        cover?: string | PrintJobCreationLineItemSource;
+        external_id?: string;
+        interior?: string | PrintJobCreationLineItemSource;
+        pod_package_id?: string;
+        printable_id?: string;
+        shipping_option: ShippingLevel;
+        printable_normalization?: PrintableNormalization;
+        quantity: number;
+        title: string;
+    }
+
+    export interface PrintJobCreationLineItemSource {
+        source_url: string;
+        source_md5_sum?: string;
+    }
+
     export interface EstimatedShippingDates {
         arrival_max: string;
         arrival_min: string;
@@ -269,6 +295,8 @@ export namespace resource {
 
         retrieve(id: string): Promise<PrintJob>;
 
+        create(param: PrintJobCreationOptions): Promise<PrintJob>;
+
         cost(id: string): Promise<PrintJobCost>;
 
         status(id: string): Promise<Status>;
@@ -329,6 +357,26 @@ export namespace resource {
                     'Cache-Control': 'no-cache',
                     'Content-Type': 'application/json',
                 },
+            };
+
+            return await this.client.request(opts);
+        }
+
+        /**
+         * Create a new Print-Job
+         * @param {PrintJobCreationOptions} param - Print-Job creation options
+         * @return Promise<PrintJob>
+         */
+        async create(param: PrintJobCreationOptions): Promise<PrintJob> {
+            let opts: rp.OptionsWithUri = {
+                method: 'POST',
+                uri: `/print-jobs/`,
+                headers: {
+                    'Cache-Control': 'no-cache',
+                    'Content-Type': 'application/json',
+                },
+                body: param,
+                json: true,
             };
 
             return await this.client.request(opts);
